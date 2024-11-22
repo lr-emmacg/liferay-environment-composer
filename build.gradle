@@ -167,6 +167,7 @@ composeUp {
 
 dockerCompose {
 	captureContainersOutput = true
+	captureContainersOutputToFiles = project.file('containerLogs')
 
 	environment.put "DATABASE_NAME", config.databaseName
 	environment.put "LIFERAY_IMAGE_NAME", config.liferayDockerImageId

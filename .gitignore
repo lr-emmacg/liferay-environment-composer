@@ -17,6 +17,7 @@
 .gradle
 .idea
 /bundles
+/containerLogs
 /data
 /gradle-*.properties
 /plugins-sdk/**/classes
