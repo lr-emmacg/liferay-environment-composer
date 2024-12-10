@@ -165,32 +165,48 @@ tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 	remotePath = "/data/container-data"
 
 }
+File sourceDataDirectory = project.file config.dataDirectory
+File targetDataDirectory = project.file "helper/data"
+
 tasks.register("prepareDataDirectory") {
 	doFirst {
-		mkdir "helper/data"
+		mkdir targetDataDirectory
 
 		copy {
-			from config.dataDirectory
+			from sourceDataDirectory
 			include "**/*"
-			into "helper/data"
+			into targetDataDirectory
 		}
 	}
 
-	outputs.dir "helper/data"
+	if (sourceDataDirectory.isDirectory()) {
+		inputs.dir sourceDataDirectory
+	}
+
+	outputs.dir targetDataDirectory
 }
+
+File sourceDumpsDirectory = project.file "dumps"
+File targetDumpsDirectory = project.file "helper/dumps"
+
 tasks.register("prepareDumps") {
 	doFirst {
-		mkdir "helper/dumps"
+		mkdir targetDumpsDirectory
 
 		copy {
-			from config.dataDirectory
+			from sourceDumpsDirectory
 			include "**/*"
-			into "helper/dumps"
+			into targetDumpsDirectory
 		}
 	}
 
-	outputs.dir "helper/dumps"
+	if (sourceDumpsDirectory.isDirectory()) {
+		inputs.dir sourceDumpsDirectory
+	}
+
+	outputs.dir targetDumpsDirectory
 }
+
 tasks.register("prepareHotfixes", Download) {
 	dest project.layout.dir(project.provider {project.file("configs/common/patching")})
 	onlyIf {
