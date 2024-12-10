@@ -21,7 +21,7 @@ services:
             - 9200:9200
             - 9300:9300
         volumes:
-            - source: data
+            - source: data-volume
               target: /usr/share/elasticsearch/data/
               type: volume
               volume:

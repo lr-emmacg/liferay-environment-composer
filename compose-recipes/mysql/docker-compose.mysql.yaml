@@ -18,12 +18,13 @@ services:
                 soft: 20000
             nproc: 65535
         volumes:
-            - source: data
+            - read_only: true
+              source: data-volume
               target: /docker-entrypoint-initdb.d
               type: volume
               volume:
                   subpath: dumps/mysql
-            - source: data
+            - source: data-volume
               target: /var/lib/mysql
               type: volume
               volume:

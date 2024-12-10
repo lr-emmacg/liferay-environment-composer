@@ -12,7 +12,7 @@ services:
             - "${LIFERAY_TELNET_PORT}:11311"
             - "${LIFERAY_DEBUG_PORT}:8000"
         volumes:
-            - source: data
+            - source: data-volume
               target: /opt/liferay/data
               type: volume
               volume:

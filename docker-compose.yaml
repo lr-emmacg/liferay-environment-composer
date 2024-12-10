@@ -4,6 +4,6 @@ services:
         build: ./helper
         container_name: ${NAMESPACE}-data-helper
         volumes:
-            - data:/data
+            - data-volume:/data
 volumes:
-    data:
+    data-volume:
