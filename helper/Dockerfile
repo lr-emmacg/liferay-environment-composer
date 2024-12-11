@@ -1,5 +1,7 @@
 FROM busybox:latest
 
+USER 1000
+
 COPY --chown=1000:1000 ./data /data/container-data
 
 RUN mkdir -p /data/container-data/elasticsearch
