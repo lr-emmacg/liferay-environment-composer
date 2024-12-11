@@ -78,10 +78,8 @@ If a `dataDirectory` is defined, data from that directory will be copied into th
 
 In order to retrieve data from the containers while they are running, use the `./gradlew exportContainerData` Gradle task. The data will be copied to a timestamped folder inside of `./exported_data`. The exported folder can then be referenced by the `dataDirectory` property in `config.json` like so:
 
-```json
-{
-	"dataDirectory": "exported_data/data_20241206.175343"
-}
+```properties
+lr.docker.environment.data.directory=exported_data/data_20241206.175343
 ```
 
 ## Deploying configuration and other files to the Liferay Docker image
