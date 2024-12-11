@@ -46,7 +46,13 @@ The Liferay version can be set in `gradle.properties`:
 liferay.workspace.product=dxp-2024.q3.8
 ```
 
-Possible values for that property can be found in the [releases.json](https://releases.liferay.com/releases.json) under the `releaseKey` key.
+This property will automatically determine the Liferay Docker image version to be used. If you need to set a more specific Liferay Docker image version, you can set it with the `liferay.workspace.docker.image.liferay` property like so:
+
+```properties
+liferay.workspace.docker.image.liferay=liferay/dxp:7.2.10-sp8
+```
+
+Possible values for the `liferay.workspace.product` property can be found in the [releases.json](https://releases.liferay.com/releases.json) under the `releaseKey` key.
 
 #### Quick tip:
 
