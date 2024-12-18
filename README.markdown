@@ -228,8 +228,6 @@ lr.docker.environment.data.directory=exported_data/data_20241206.175343
 ./gradlew exportContainerData
 ```
 
-This task will
-
 #### Clean up prepared database dumps
 
 ```
