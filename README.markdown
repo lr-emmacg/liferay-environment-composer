@@ -158,7 +158,7 @@ lr.docker.environment.compose.profiles=\
 
 #### Import a database dump
 
-Database dump files can be added to the `./dumps` directory at the root of the Workspace. It will automatically be copied into the MySQL container.
+Database dump files can be added to the `./dumps` directory at the root of the Workspace (you may have to create it). It will automatically be copied into the MySQL container.
 
 ```
 ./dumps/dumpfile.sql
