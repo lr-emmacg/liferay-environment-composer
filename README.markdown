@@ -7,6 +7,7 @@ A collection of docker-compose configurations for re-creating different Liferay 
 This Liferay Workspace is set up so you can immediately spin up an environment with Liferay, a database, and Elasticsearch set up. Different features and services ("profiles") can be included or omitted as needed.
 
 To start up the environment, run `./gradlew composeUp`.
+
 To shut down the environment, run `./gradlew composeDown`.
 
 ## Features
