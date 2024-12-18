@@ -111,18 +111,27 @@ if (namespace != null) {
 	config.namespace = namespace
 }
 
+boolean useLiferay = config.composeProfiles.contains("liferay")
+
+boolean useClustering = useLiferay && config.clusterNodes > 0
+
 ConfigurableFileTree dockerComposeFileTree = project.fileTree(projectDir) {
 	include "**/docker-compose.*.yaml"
 
-	if (config.clusterNodes > 0) {
+	if (useClustering) {
 		include "**/clustering.*.yaml"
+	}
+
+	if (useLiferay) {
+		include "**/liferay.*.yaml"
+
 	}
 }
 
-List<String> possibleProfiles = dockerComposeFileTree.collect {
-	File file ->
-
-	file.name.substring("docker-compose.".length(), file.name.indexOf(".yaml"))
+List<String> possibleProfiles = dockerComposeFileTree.findAll{
+	it.name.startsWith("docker-compose")
+}.collect {
+	it.name.substring("docker-compose.".length(), it.name.indexOf(".yaml"))
 } as List<String>
 
 List<String> composeProfileFiles = config.composeProfiles.collect {
@@ -225,13 +234,19 @@ clean {
 	dependsOn ":cleanPrepareHotfixes"
 }
 dockerDeploy {
-	dependsOn ":prepareDataDirectory"
-	dependsOn ":prepareDumps"
-	dependsOn ":prepareHotfixes"
+	if (useLiferay) {
+		dependsOn ":prepareHotfixes"
+	}
 }
 
+composeBuild {
+	dependsOn ":prepareDataDirectory"
+	dependsOn ":prepareDumps"
+}
 composeUp {
-	dependsOn ":buildDockerImage"
+	if (useLiferay) {
+		dependsOn ":buildDockerImage"
+	}
 
 	doFirst {
 		println "Using config: ${config}"
@@ -247,13 +262,18 @@ dockerCompose {
 	captureContainersOutputToFiles = project.file('containerLogs')
 
 	environment.put "DATABASE_NAME", config.databaseName
-	environment.put "LIFERAY_IMAGE_NAME", config.liferayDockerImageId
 	environment.put "NAMESPACE", config.namespace
+
+	if (useLiferay) {
+		environment.put "LIFERAY_IMAGE_NAME", config.liferayDockerImageId
+	}
+
+	projectName = config.namespace
 
 	// DEBUG: Set to false to retain volume data on restart
 	removeVolumes = true
 
-	if (config.clusterNodes > 0) {
+	if (useClustering) {
 		scale = ["liferay-cluster-node": config.clusterNodes]
 	}
 
