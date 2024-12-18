@@ -162,8 +162,8 @@ tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 
 	hostPath = provider {
 		DateTimeFormatter formatter = DateTimeFormatter.
-			ofPattern("yyyyMMdd.HHmmss").
-			withZone(ZoneId.systemDefault())
+		ofPattern("yyyyMMdd.HHmmss").
+		withZone(ZoneId.systemDefault())
 
 		"exported_data/data_${formatter.format(Instant.now())}"
 	}
