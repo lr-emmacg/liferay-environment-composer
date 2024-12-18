@@ -14,13 +14,13 @@ File projectDir = project.projectDir as File
 
 class Config {
 	public List<String> hotfixURLs = new ArrayList<String>()
-	public String namespace
-	public int clusterNodes
+	public String namespace = "lrswde"
+	public int clusterNodes = 0
 	public List<String> composeFiles = new ArrayList<String>()
 	public List<String> composeProfiles = new ArrayList<String>()
-	public String databaseName
-	public String dataDirectory
-	public String liferayDockerImageId
+	public String databaseName = "lportal"
+	public String dataDirectory = "data"
+	public String liferayDockerImageId = ""
 
 	@Override
 	public String toString() {
@@ -44,30 +44,7 @@ liferayDockerImageId: ${liferayDockerImageId}
 Config config = new Config()
 
 config.composeFiles.add("docker-compose.yaml")
-
-/*
---- BEGIN User configuration
- */
-
-config.composeFiles.addAll([
-])
-config.composeProfiles.addAll([
-	"liferay",
-
-	"mysql",
-])
-config.hotfixURLs.addAll([
-	// "https://releases-cdn.liferay.com/dxp/hotfix/2024.q2.7/liferay-dxp-2024.q2.7-hotfix-4.zip",
-])
-config.namespace = project.name
-config.clusterNodes = 0
-config.databaseName = "lportal"
-config.dataDirectory = "data"
 config.liferayDockerImageId = gradle.liferayWorkspace.dockerImageId as String
-
-/*
---- END User configuration
- */
 
 static List toList(String s) {
 	return s.trim().split(",").grep()
