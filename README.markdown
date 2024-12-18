@@ -134,7 +134,7 @@ Add a license files to `./configs/common/deploy`.
 
 #### Enable clustering
 
-Clustering can be enabled by setting the `lr.docker.environment.cluster.nodes` property in `gradle.properties. Setting it to 0 means no clustering is enabled. Setting it to 1 or more will add that many cluster nodes in addition to the main Liferay instance.
+Clustering can be enabled by setting the `lr.docker.environment.cluster.nodes` property in `gradle.properties`. Setting it to 0 means no clustering is enabled. Setting it to 1 or more will add that many cluster nodes in addition to the main Liferay instance.
 
 `gradle.properties`:
 
