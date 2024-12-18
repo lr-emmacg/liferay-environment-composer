@@ -75,7 +75,13 @@ static List toList(String s) {
 
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
-List composeProfiles = toList(project.getProperty("lr.docker.environment.compose.profiles"))
+List composeProfiles = project.properties.findAll {
+	it.key =~ /^lr.docker.environment.compose.profile.enabled\[\w+\]$/
+}.findAll {
+	it.value =~ /true|1/
+}.collect {
+	it.key.substring(it.key.indexOf("[") + 1, it.key.indexOf("]"))
+}
 String dataDirectory = project.getProperty("lr.docker.environment.data.directory")
 String databaseName = project.getProperty("lr.docker.environment.database.name")
 List hotfixURLs = toList(project.getProperty("lr.docker.environment.hotfix.urls"))
