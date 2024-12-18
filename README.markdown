@@ -147,14 +147,12 @@ lr.docker.environment.cluster.nodes=2
 
 #### Enable MySQL 5.7
 
-Add `mysql` to the `lr.docker.environment.compose.profiles` property in `gradle.properties`.
+Set the `lr.docker.environment.compose.profile.enabled[mysql]` property to `true` or `1` in `gradle.properties`.
 
 `gradle.properties`:
 
 ```properties
-lr.docker.environment.compose.profiles=\
-    liferay,\
-    mysql
+lr.docker.environment.compose.profile.enabled[mysql]=true
 ```
 
 #### Import a database dump
@@ -169,14 +167,12 @@ Database dump files can be added to the `./dumps` directory at the root of the W
 
 #### Enable standalone Elasticsearch
 
-Add `elasticsearch` to the `lr.docker.environment.compose.profiles` property in `gradle.properties`.
+Set the `lr.docker.environment.compose.profile.enabled[elasticsearch]` property to `true` or `1` in `gradle.properties`.
 
 `gradle.properties`:
 
 ```properties
-lr.docker.environment.compose.profiles=\
-    liferay,\
-    elasticsearch
+lr.docker.environment.compose.profile.enabled[elasticsearch]=true
 ```
 
 ### Data Features
