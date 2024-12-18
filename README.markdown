@@ -219,7 +219,7 @@ lr.docker.environment.data.directory=exported_data/data_20241206.175343
 #### Shut down environment
 
 ```
-./gradlew composeUp
+./gradlew composeDown
 ```
 
 #### Export container data
