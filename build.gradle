@@ -13,14 +13,14 @@ plugins {
 File projectDir = project.projectDir as File
 
 class Config {
-	public List<String> hotfixURLs = new ArrayList<String>()
-	public String namespace = "lrswde"
 	public int clusterNodes = 0
 	public List<String> composeFiles = new ArrayList<String>()
-	public List<String> composeServices = new ArrayList<String>()
 	public String databaseName = "lportal"
 	public String dataDirectory = "data"
+	public List<String> hotfixURLs = new ArrayList<String>()
 	public String liferayDockerImageId = ""
+	public String namespace = "lrswde"
+	public List<String> services = new ArrayList<String>()
 
 	@Override
 	public String toString() {
@@ -29,14 +29,14 @@ class Config {
 
 Config:
 ------------------------
-hotfixURLs: ${hotfixURLs}
-namespace: ${namespace}
 clusterNodes: ${clusterNodes}
 composeFiles: ${composeFiles}
-composeServices: ${composeServices}
 databaseName: ${databaseName}
 dataDirectory: ${dataDirectory}
+hotfixURLs: ${hotfixURLs}
 liferayDockerImageId: ${liferayDockerImageId}
+namespace: ${namespace}
+services: ${services}
 
 """
 	}
@@ -53,24 +53,20 @@ static List toList(String s) {
 
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
-List composeServices = project.properties.findAll {
+String dataDirectory = project.getProperty("lr.docker.environment.data.directory")
+String databaseName = project.getProperty("lr.docker.environment.database.name")
+List hotfixURLs = toList(project.getProperty("lr.docker.environment.hotfix.urls"))
+String namespace = project.getProperty("lr.docker.environment.namespace")
+List services = project.properties.findAll {
 	it.key =~ /^lr.docker.environment.service.enabled\[\w+\]$/
 }.findAll {
 	it.value =~ /true|1/
 }.collect {
 	it.key.substring(it.key.indexOf("[") + 1, it.key.indexOf("]"))
 }
-String dataDirectory = project.getProperty("lr.docker.environment.data.directory")
-String databaseName = project.getProperty("lr.docker.environment.database.name")
-List hotfixURLs = toList(project.getProperty("lr.docker.environment.hotfix.urls"))
-String namespace = project.getProperty("lr.docker.environment.namespace")
 
 if (clusterNodes != null) {
 	config.clusterNodes = clusterNodes
-}
-
-if (!composeServices.isEmpty()) {
-	config.composeServices = composeServices
 }
 
 if (databaseName != null) {
@@ -89,12 +85,16 @@ if (namespace != null) {
 	config.namespace = namespace
 }
 
-boolean useLiferay = config.composeServices.contains("liferay")
+if (!services.isEmpty()) {
+	config.services = services
+}
+
+boolean useLiferay = config.services.contains("liferay")
 
 boolean useClustering = useLiferay && config.clusterNodes > 0
 
 ConfigurableFileTree dockerComposeFileTree = project.fileTree(projectDir) {
-	include "**/docker-compose.*.yaml"
+	include "**/service.*.yaml"
 
 	if (useClustering) {
 		include "**/clustering.*.yaml"
@@ -102,26 +102,25 @@ ConfigurableFileTree dockerComposeFileTree = project.fileTree(projectDir) {
 
 	if (useLiferay) {
 		include "**/liferay.*.yaml"
-
 	}
 }
 
 List<String> possibleServices = dockerComposeFileTree.findAll{
-	it.name.startsWith("docker-compose")
+	it.name.startsWith("service.")
 }.collect {
-	it.name.substring("docker-compose.".length(), it.name.indexOf(".yaml"))
+	it.name.substring("service.".length(), it.name.indexOf(".yaml"))
 } as List<String>
 
-List<String> composeServiceFiles = config.composeServices.collect {
-	String service ->
+List<String> serviceComposeFiles = config.services.collect {
+	String serviceName ->
 
 	FileTree matchingFileTree = dockerComposeFileTree.matching {
-		include "**/*.${service}.yaml"
+		include "**/*.${serviceName}.yaml"
 	}
 
 	if (matchingFileTree.isEmpty()) {
 		throw new GradleException(
-			"The service '${service}' does not have a matching docker-compose file. Possible services are: ${possibleServices}");
+			"The service '${serviceName}' does not have a matching service.*.yaml file. Possible services are: ${possibleServices}");
 	}
 
 	matchingFileTree.getFiles()
@@ -129,7 +128,7 @@ List<String> composeServiceFiles = config.composeServices.collect {
 	projectDir.relativePath(it)
 }
 
-config.composeFiles.addAll(composeServiceFiles)
+config.composeFiles.addAll(serviceComposeFiles)
 
 tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 	containerId = "${config.namespace}-data-helper"
