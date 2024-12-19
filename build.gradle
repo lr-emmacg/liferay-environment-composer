@@ -17,7 +17,7 @@ class Config {
 	public String namespace = "lrswde"
 	public int clusterNodes = 0
 	public List<String> composeFiles = new ArrayList<String>()
-	public List<String> composeProfiles = new ArrayList<String>()
+	public List<String> composeServices = new ArrayList<String>()
 	public String databaseName = "lportal"
 	public String dataDirectory = "data"
 	public String liferayDockerImageId = ""
@@ -33,7 +33,7 @@ hotfixURLs: ${hotfixURLs}
 namespace: ${namespace}
 clusterNodes: ${clusterNodes}
 composeFiles: ${composeFiles}
-composeProfiles: ${composeProfiles}
+composeServices: ${composeServices}
 databaseName: ${databaseName}
 dataDirectory: ${dataDirectory}
 liferayDockerImageId: ${liferayDockerImageId}
@@ -53,8 +53,8 @@ static List toList(String s) {
 
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
-List composeProfiles = project.properties.findAll {
-	it.key =~ /^lr.docker.environment.compose.profile.enabled\[\w+\]$/
+List composeServices = project.properties.findAll {
+	it.key =~ /^lr.docker.environment.compose.service.enabled\[\w+\]$/
 }.findAll {
 	it.value =~ /true|1/
 }.collect {
@@ -69,8 +69,8 @@ if (clusterNodes != null) {
 	config.clusterNodes = clusterNodes
 }
 
-if (!composeProfiles.isEmpty()) {
-	config.composeProfiles = composeProfiles
+if (!composeServices.isEmpty()) {
+	config.composeServices = composeServices
 }
 
 if (databaseName != null) {
@@ -89,7 +89,7 @@ if (namespace != null) {
 	config.namespace = namespace
 }
 
-boolean useLiferay = config.composeProfiles.contains("liferay")
+boolean useLiferay = config.composeServices.contains("liferay")
 
 boolean useClustering = useLiferay && config.clusterNodes > 0
 
@@ -106,22 +106,22 @@ ConfigurableFileTree dockerComposeFileTree = project.fileTree(projectDir) {
 	}
 }
 
-List<String> possibleProfiles = dockerComposeFileTree.findAll{
+List<String> possibleServices = dockerComposeFileTree.findAll{
 	it.name.startsWith("docker-compose")
 }.collect {
 	it.name.substring("docker-compose.".length(), it.name.indexOf(".yaml"))
 } as List<String>
 
-List<String> composeProfileFiles = config.composeProfiles.collect {
-	String profile ->
+List<String> composeServiceFiles = config.composeServices.collect {
+	String service ->
 
 	FileTree matchingFileTree = dockerComposeFileTree.matching {
-		include "**/*.${profile}.yaml"
+		include "**/*.${service}.yaml"
 	}
 
 	if (matchingFileTree.isEmpty()) {
 		throw new GradleException(
-			"The profile '${profile}' does not have a matching docker-compose file. Possible profiles are: ${possibleProfiles}");
+			"The service '${service}' does not have a matching docker-compose file. Possible services are: ${possibleServices}");
 	}
 
 	matchingFileTree.getFiles()
@@ -129,7 +129,7 @@ List<String> composeProfileFiles = config.composeProfiles.collect {
 	projectDir.relativePath(it)
 }
 
-config.composeFiles.addAll(composeProfileFiles)
+config.composeFiles.addAll(composeServiceFiles)
 
 tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 	containerId = "${config.namespace}-data-helper"
@@ -157,10 +157,10 @@ tasks.register("prepareHotfixes", Download) {
 	}
 	src config.hotfixURLs
 }
-tasks.register("possibleProfiles") {
-	description "Displays the possible profile names that can be used with docker-compose."
+tasks.register("possibleServices") {
+	description "Displays the possible service names that can be used with docker-compose."
 	doFirst {
-		println "Possible profiles: ${possibleProfiles}"
+		println "Possible services: ${possibleServices}"
 	}
 	group "help"
 }

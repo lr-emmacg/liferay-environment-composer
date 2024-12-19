@@ -4,7 +4,7 @@ A collection of docker-compose configurations for re-creating different Liferay 
 
 ## Quick start
 
-This Liferay Workspace is set up so you can immediately spin up an environment with Liferay, a database, and Elasticsearch set up. Different features and services ("profiles") can be included or omitted as needed.
+This Liferay Workspace is set up so you can immediately spin up an environment with Liferay, a database, and Elasticsearch set up. Different features and services can be included or omitted as needed.
 
 To start up the environment, run `./gradlew composeUp`.
 
@@ -147,12 +147,12 @@ lr.docker.environment.cluster.nodes=2
 
 #### Enable MySQL 5.7
 
-Set the `lr.docker.environment.compose.profile.enabled[mysql]` property to `true` or `1` in `gradle.properties`.
+Set the `lr.docker.environment.compose.service.enabled[mysql]` property to `true` or `1` in `gradle.properties`.
 
 `gradle.properties`:
 
 ```properties
-lr.docker.environment.compose.profile.enabled[mysql]=true
+lr.docker.environment.compose.service.enabled[mysql]=true
 ```
 
 #### Import a database dump
@@ -167,12 +167,12 @@ Database dump files can be added to the `./dumps` directory at the root of the W
 
 #### Enable standalone Elasticsearch
 
-Set the `lr.docker.environment.compose.profile.enabled[elasticsearch]` property to `true` or `1` in `gradle.properties`.
+Set the `lr.docker.environment.compose.service.enabled[elasticsearch]` property to `true` or `1` in `gradle.properties`.
 
 `gradle.properties`:
 
 ```properties
-lr.docker.environment.compose.profile.enabled[elasticsearch]=true
+lr.docker.environment.compose.service.enabled[elasticsearch]=true
 ```
 
 ### Data Features
