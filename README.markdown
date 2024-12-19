@@ -224,18 +224,6 @@ lr.docker.environment.data.directory=exported_data/data_20241206.175343
 ./gradlew exportContainerData
 ```
 
-#### Clean up prepared database dumps
-
-```
-./gradlew cleanPrepareDumps
-```
-
-#### Clean up prepared data directory
-
-```
-./gradlew cleanPrepareDataDirectory
-```
-
 #### Clean up prepared hotfixes
 
 ```
