@@ -10,6 +10,10 @@ plugins {
 	id "com.avast.gradle.docker-compose" version "0.17.10"
 }
 
+static List toList(String s) {
+	return s.trim().split(",").grep()
+}
+
 File projectDir = project.projectDir as File
 
 class Config {
@@ -46,10 +50,6 @@ Config config = new Config()
 
 config.composeFiles.add("docker-compose.yaml")
 config.liferayDockerImageId = gradle.liferayWorkspace.dockerImageId as String
-
-static List toList(String s) {
-	return s.trim().split(",").grep()
-}
 
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
@@ -146,20 +146,22 @@ tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 	}
 
 	remotePath = "/data/container-data"
-
 }
 
 tasks.register("prepareHotfixes", Download) {
 	dest project.layout.dir(project.provider {project.file("configs/common/patching")})
+
 	onlyIf {
 		!config.hotfixURLs.isEmpty()
 	}
+
 	src config.hotfixURLs
 }
 
 clean {
 	dependsOn ":cleanPrepareHotfixes"
 }
+
 dockerDeploy {
 	if (useLiferay) {
 		dependsOn ":prepareHotfixes"
