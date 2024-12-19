@@ -54,7 +54,7 @@ static List toList(String s) {
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
 List composeServices = project.properties.findAll {
-	it.key =~ /^lr.docker.environment.compose.service.enabled\[\w+\]$/
+	it.key =~ /^lr.docker.environment.service.enabled\[\w+\]$/
 }.findAll {
 	it.value =~ /true|1/
 }.collect {
