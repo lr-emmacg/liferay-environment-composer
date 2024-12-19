@@ -105,12 +105,6 @@ ConfigurableFileTree dockerComposeFileTree = project.fileTree(projectDir) {
 	}
 }
 
-List<String> possibleServices = dockerComposeFileTree.findAll{
-	it.name.startsWith("service.")
-}.collect {
-	it.name.substring("service.".length(), it.name.indexOf(".yaml"))
-} as List<String>
-
 List<String> serviceComposeFiles = config.services.collect {
 	String serviceName ->
 
@@ -119,6 +113,12 @@ List<String> serviceComposeFiles = config.services.collect {
 	}
 
 	if (matchingFileTree.isEmpty()) {
+		List<String> possibleServices = dockerComposeFileTree.findAll{
+			it.name.startsWith("service.")
+		}.collect {
+			it.name.substring("service.".length(), it.name.indexOf(".yaml"))
+		}
+
 		throw new GradleException(
 			"The service '${serviceName}' does not have a matching service.*.yaml file. Possible services are: ${possibleServices}");
 	}
@@ -155,13 +155,6 @@ tasks.register("prepareHotfixes", Download) {
 		!config.hotfixURLs.isEmpty()
 	}
 	src config.hotfixURLs
-}
-tasks.register("possibleServices") {
-	description "Displays the possible service names that can be used with docker-compose."
-	doFirst {
-		println "Possible services: ${possibleServices}"
-	}
-	group "help"
 }
 
 clean {
