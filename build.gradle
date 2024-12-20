@@ -182,6 +182,20 @@ composeUp {
 	}
 }
 
+Map<String, Object> environmentMap = [:]
+
+environmentMap.put "DATA_DIRECTORY", config.dataDirectory
+environmentMap.put "DATABASE_NAME", config.databaseName
+environmentMap.put "NAMESPACE", config.namespace
+
+if (useClustering) {
+	environmentMap.put "LIFERAY_CLUSTER_NODES", config.clusterNodes
+}
+
+if (useLiferay) {
+	environmentMap.put "LIFERAY_IMAGE_NAME", config.liferayDockerImageId
+}
+
 dockerCompose {
 	// DEBUG: Set to true to print container startup output to the console
 	captureContainersOutput = false
@@ -189,22 +203,12 @@ dockerCompose {
 	// DEBUG: Uncomment to dump the container logs to a directory for inspection
 	// captureContainersOutputToFiles = project.file('containerLogs')
 
-	environment.put "DATA_DIRECTORY", config.dataDirectory
-	environment.put "DATABASE_NAME", config.databaseName
-	environment.put "NAMESPACE", config.namespace
-
-	if (useLiferay) {
-		environment.put "LIFERAY_IMAGE_NAME", config.liferayDockerImageId
-	}
+	environment.putAll environmentMap
 
 	projectName = config.namespace
 
 	// DEBUG: Set to false to retain volume data on restart
 	removeVolumes = true
-
-	if (useClustering) {
-		scale = ["liferay-cluster-node": config.clusterNodes]
-	}
 
 	tcpPortsToIgnoreWhenWaiting = [8000, 11311]
 	useComposeFiles = config.composeFiles
