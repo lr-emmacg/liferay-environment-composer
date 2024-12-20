@@ -49,8 +49,6 @@ To shut down the environment, run `./gradlew composeDown`.
 
 - [Start up environment](#start-up-environment)
 - [Shut down environment](#shut-down-environment)
-- [Clean up prepared database dumps](#clean-up-prepared-database-dumps)
-- [Clean up prepared data directory](#clean-up-prepared-data-directory)
 - [Clean up prepared hotfixes](#clean-up-prepared-hotfixes)
 - [Clean up all prepared data and built Liferay Docker images](#clean-up-all-prepared-data-and-built-liferay-docker-images)
 
