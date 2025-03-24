@@ -1,5 +1,7 @@
 FROM busybox:latest
 
+ARG DATA_DIRECTORY=data
+
 USER 1000
 
 COPY --chown=1000:1000 ${DATA_DIRECTORY} /data/container-data
