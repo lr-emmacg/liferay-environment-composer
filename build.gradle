@@ -147,7 +147,7 @@ tasks.register("exportContainerData", DockerCopyFileFromContainer) {
 		ofPattern("yyyyMMdd.HHmmss").
 		withZone(ZoneId.systemDefault())
 
-		"exported_data/data_${formatter.format(Instant.now())}"
+		"exported_data/data_${config.namespace}_${formatter.format(Instant.now())}"
 	}
 
 	remotePath = "/data/container-data"
