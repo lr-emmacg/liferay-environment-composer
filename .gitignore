@@ -32,4 +32,5 @@
 /plugins-sdk/dependencies/**/*.jar
 /plugins-sdk/dist
 /plugins-sdk/lib
+/shared_workspaces
 test-results
