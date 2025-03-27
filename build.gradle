@@ -49,7 +49,6 @@ services: ${services}
 Config config = new Config()
 
 config.composeFiles.add("docker-compose.yaml")
-config.liferayDockerImageId = gradle.liferayWorkspace.dockerImageId as String
 
 Integer clusterNodes = project.getProperty("lr.docker.environment.cluster.nodes") as Integer
 def composeFiles = toList(project.getProperty("lr.docker.environment.compose.files"))
@@ -87,6 +86,12 @@ if (namespace != null) {
 
 if (!services.isEmpty()) {
 	config.services = services
+}
+
+config.liferayDockerImageId = "${config.namespace}-liferay"
+
+gradle.liferayWorkspace {
+	dockerImageId = config.liferayDockerImageId
 }
 
 boolean useLiferay = config.services.contains("liferay")
