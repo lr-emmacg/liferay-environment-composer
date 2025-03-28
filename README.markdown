@@ -40,6 +40,9 @@ To shut down the environment, run `./gradlew composeDown`.
 - [Export container data to a timestamped directory](#export-container-data-to-a-timestamped-directory)
 - [Import data for various containers](#import-data-for-various-containers)
 
+### Sharing features overview
+- [Zip up the workspace to share the setup](#zip-up-the-workspace-to-share-the-setup)
+
 ### Docker features overview
 
 - [Build a custom Liferay image with custom modules and configs included](#build-a-custom-liferay-image-with-custom-modules-and-configs-included)
@@ -202,6 +205,18 @@ data_folder          (directory in their repsective container)
 lr.docker.environment.data.directory=exported_data/data_20241206.175343
 ```
 
+### Sharing Features
+
+#### Zip up the workspace to share the setup
+
+```
+./gradlew shareWorkspace
+```
+
+This will zip up the workspace as-is, including the declared data folder, into a shareable `zip` file. The zipped workspace will be timestamped and placed in the `./shared_workspaces` directory. It will omit unnecessary files such as the `.gradle` and `.git` directories, as well as other exported data folders and shared workspaces in the `exported_data` and `shared_workspaces` directories.
+
+The shared workspace should be immediately usable by simply unzipping the archive, `cd` to the unzipped folder, and starting up with `./gradlew composeUp`.
+
 ### Gradle tasks
 
 #### Start up environment
@@ -220,6 +235,12 @@ lr.docker.environment.data.directory=exported_data/data_20241206.175343
 
 ```
 ./gradlew exportContainerData
+```
+
+#### Zip the workspace for sharing
+
+```
+./gradlew shareWorkspace
 ```
 
 #### Clean up prepared hotfixes
