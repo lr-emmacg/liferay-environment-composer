@@ -88,7 +88,7 @@ if (!services.isEmpty()) {
 	config.services = services
 }
 
-config.liferayDockerImageId = "${config.namespace}-liferay"
+config.liferayDockerImageId = "${config.namespace.toLowerCase()}-liferay"
 
 gradle.liferayWorkspace {
 	dockerImageId = config.liferayDockerImageId
