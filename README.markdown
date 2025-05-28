@@ -6,9 +6,9 @@ A collection of docker-compose configurations for re-creating different Liferay 
 
 This Liferay Workspace is set up so you can immediately spin up an environment with Liferay, a database, and Elasticsearch set up. Different features and services can be included or omitted as needed.
 
-To start up the environment, run `./gradlew composeUp`.
+To start up the environment, run `./gradlew start`.
 
-To shut down the environment, run `./gradlew composeDown`.
+To shut down the environment, run `./gradlew stop`.
 
 ## Features
 
@@ -237,20 +237,20 @@ lr.docker.environment.data.directory=exported_data/data_20241206.175343
 
 This will zip up the workspace as-is, including the declared data folder, into a shareable `zip` file. The zipped workspace will be timestamped and placed in the `./shared_workspaces` directory. It will omit unnecessary files such as the `.gradle` and `.git` directories, as well as other exported data folders and shared workspaces in the `exported_data` and `shared_workspaces` directories.
 
-The shared workspace should be immediately usable by simply unzipping the archive, `cd` to the unzipped folder, and starting up with `./gradlew composeUp`.
+The shared workspace should be immediately usable by simply unzipping the archive, `cd` to the unzipped folder, and starting up with `./gradlew start`.
 
 ### Gradle tasks
 
 #### Start up environment
 
 ```
-./gradlew composeUp
+./gradlew start
 ```
 
 #### Shut down environment
 
 ```
-./gradlew composeDown
+./gradlew stop
 ```
 
 #### Export container data
