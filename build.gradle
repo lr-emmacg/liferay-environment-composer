@@ -222,7 +222,6 @@ tasks.register("stop") {
 	dependsOn ":composeDown"
 }
 
-
 clean {
 	dependsOn ":cleanPrepareHotfixes"
 }
