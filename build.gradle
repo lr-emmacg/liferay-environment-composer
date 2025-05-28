@@ -214,6 +214,15 @@ tasks.register("shareWorkspace", Zip) {
 	}
 }
 
+tasks.register("start") {
+	dependsOn ":composeUp"
+}
+
+tasks.register("stop") {
+	dependsOn ":composeDown"
+}
+
+
 clean {
 	dependsOn ":cleanPrepareHotfixes"
 }
