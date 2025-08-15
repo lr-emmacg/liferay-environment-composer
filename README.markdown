@@ -1,6 +1,6 @@
-# liferay-workspace-docker-environments
+# Liferay Environment Composer
 
-A collection of docker-compose configurations for re-creating different Liferay environments
+Tools for re-creating different Liferay environments and sharing those environments with others, built on Liferay Workspace and Docker Compose.
 
 ## Quick start
 
