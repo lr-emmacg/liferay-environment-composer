@@ -88,6 +88,7 @@ _printHelpAndExit() {
 		  clean                            Stop a Composer project and remove Docker volumes
 		  remove                           Completely tear down and remove a Composer project
 		  update [--unstable]              Check for updates to Composer and lec. The "--unstable" flag updates to latest master branch.
+		  version                          Prints the current version of lec
 
 		  importDLStructure <sourceDir>    Import a Document Library (file structure only, no content) into configs/common/data/document_library
 
@@ -610,6 +611,9 @@ cmd_update() {
 	fi
 
 	_print_success "Updated to newer version ${C_BLUE}${latest_tag}${C_NC}"
+}
+cmd_version() {
+	_git describe --tags --abbrev=0 2>/dev/null
 }
 
 #
